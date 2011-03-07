@@ -1,0 +1,29 @@
+.panel
+  .title
+    +$thread->subject
+  .body
+    -foreach($thread->private_messages as $m)
+      .item
+        .title
+          +$m->sender->username
+          =se("said...")
+          -if ($m->sender_id != $current_user->id && $m->status_for($current_user)->read_at > (time()-3600))
+            .new New
+        .body
+          %img{:src=>$m->sender->tiny_avatar_url}
+          +$m->body
+        .clear
+        .footer
+          Sent at
+          +click_date_format($m->created_at)
+    .item
+      .title
+        =se("New Reply")
+      .body
+        =form_for($new_message)
+        =se("Body")
+        %br
+        =textarea_field('body')
+        %br
+        =submit_tag('Send')
+        =end_form_for()

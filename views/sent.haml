@@ -1,0 +1,15 @@
+.messages
+  - if (count($messages)>0)
+    -foreach($messages as $m)
+      .avatar{:style=>'float:left; width: 80px; height: 110px;'}
+        %img{:src=>$m->recipient->tiny_avatar_url}
+        %br
+        +$m->recipient->username
+      .curmessage{:style=>'float:left; margin-left:10px; width: 390px; min-height: 110px'}
+        Sent at
+        +click_date_format($m->created_at)
+        %br
+        %div
+          +$m->body
+  - else
+    You have not sent any messages.

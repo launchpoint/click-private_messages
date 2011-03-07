@@ -1,0 +1,27 @@
+.panel
+  .title
+    =se("Inbox")
+  .description
+    =$message_center_list['output']
+    -if (count($current_user->private_message_threads)>0)
+      -foreach($current_user->private_message_threads as $thread)
+        -$m = $thread->next_message_to_read_for($current_user)
+        .item
+          .title
+            -if($m->sender->id != $current_user->id)
+              +$m->sender->username
+            -else
+              +$m->recipient->username
+            =se(" :: ")
+            %a{:href=>view_private_message_thread_url($thread)} +$thread->subject
+          .status
+            - $c = count($thread->unread_messages_for($current_user))
+            - if ($c>0) echo " ($c unread)"
+          .body
+            -if($m->sender->id != $current_user->id)
+              %img{:src=>$m->sender->tiny_avatar_url}
+            -else
+              %img{:src=>$m->recipient->tiny_avatar_url}
+            +$m->excerpt
+    -else
+      You have not received any messages.

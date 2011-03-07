@@ -1,0 +1,54 @@
+.panel
+  .title Send a Message
+  -event('contact_user_header', array('recipient'=>$recipient, 'message'=>$message))
+  -if (!is_postback() || !$message->is_valid)
+    =form_for($message)
+    %table
+      %tr
+        %th
+          =se("To")
+        %td
+          +$recipient->username
+      %tr
+        %th
+          =se("From")
+        %td 
+          +$current_user->username
+      %tr
+        %th 
+          =se("Subject")
+        %td
+          =text_field('subject')
+      %tr
+        %th
+          =se("Body")
+        %td 
+          =textarea_field('body')
+      %tr
+        %th
+        %td
+          =submit_tag('Send')
+    =end_form_tag()
+  -else
+    %table
+      %tr
+        %th
+          =se("To")
+        %td
+          +$recipient->username
+      %tr
+        %th
+          =se("From")
+        %td 
+          +$current_user->username
+      %tr
+        %th 
+          =se("Subject")
+        %td
+          +$message->subject
+      %tr
+        %th
+          =se("Body")
+        %td 
+          +$message->body
+    -event('contact_user_sent_footer', array('recipient'=>$recipient, 'message'=>$message) )
